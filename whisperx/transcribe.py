@@ -161,7 +161,7 @@ def cli():
                 parser.error(f"--{option} not possible with --no_align")
     if args["max_line_count"] and not args["max_line_width"]:
         warnings.warn("--max_line_count has no effect without --max_line_width")
-    writer_args = {arg: args.pop(arg) for arg in word_options}
+    writer_args = {'diarize': diarize} | {arg: args.pop(arg) for arg in word_options}
     
     # Part 1: VAD & ASR Loop
     results = []

@@ -214,7 +214,15 @@ class WriteTXT(ResultWriter):
 
     def write_result(self, result: dict, file: TextIO, options: dict):
         for segment in result["segments"]:
-            print(segment["text"].strip(), file=file, flush=True)
+            # if options["diarize"]:
+            #     print(segment["text"].strip(), file=file, flush=True)
+            # else:
+            start = format_timestamp(segment["start"])
+            end = format_timestamp(segment["end"])
+            speaker = segment.get("speaker", "Unknown")
+            text = segment["text"].strip()
+            print(f"{start}\t{end}\t{speaker}\t{text}", file=file, flush=True)
+            
 
 
 class SubtitlesWriter(ResultWriter):
@@ -404,7 +412,7 @@ class WriteJSON(ResultWriter):
 
 
 def get_writer(
-    output_format: str, output_dir: str
+    output_format: str, output_dir: str, diarize: bool = False
 ) -> Callable[[dict, TextIO, dict], None]:
     writers = {
         "txt": WriteTXT,
